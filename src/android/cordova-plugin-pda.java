@@ -1,7 +1,9 @@
 
 
 package cordova.plugin.pda;
-
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -21,25 +23,36 @@ public class ScanerUtil extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("readScanerText")) {
-            //条码Receiver
-            private BroadcastReceiver mScanDataReceiver mScanDataReceiver = new BroadcastReceiver(){
+            //定义条码Receiver
+            private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context context, Intent intent){
                     String action = intent.getAction();
 //                    int keycode = intent.getIntExtra("Scan_Keycode", 0);
-                    if (action.equals("com.android.scancontext")){
-                        // 前台输出
-                        String str = intent.getStringExtra("Scan_context");
-                        callbackContext.success(str);
-                        //注销条码Receiver
-                        unregisterReceiver(mScanDataReceiver);
-                    } else if (action.equals("com.android.scanservice.scancontext")) {
-                        // 后台输出
-                        String str = intent.getStringExtra("Scan_context");
-                        callbackContext.success(str);
-                        //注销条码Receiver
-                        unregisterReceiver(mScanDataReceiver);
+                    try {
+                        if (action.equals("com.android.scancontext")){
+                            // 前台输出
+                            String str = intent.getStringExtra("Scan_context");
+                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,str );
+                            pluginResult.setKeepCallback(true);
+                            callback_context.sendPluginResult(pluginResult);
+                            //注销条码Receiver
+                            unregisterReceiver(mScanDataReceiver);
+                        } else if (action.equals("com.android.scanservice.scancontext")) {
+                            // 后台输出
+                            String str = intent.getStringExtra("Scan_context");
+                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,str );
+                            pluginResult.setKeepCallback(true);
+                            callback_context.sendPluginResult(pluginResult);
+                            //注销条码Receiver
+                            unregisterReceiver(mScanDataReceiver);
+                        }
+                    } catch (Exception e) {
+                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,"获取扫描结果失败");
+                        pluginResult.setKeepCallback(true);
+                        callback_context.sendPluginResult(pluginResult);
                     }
+
                 }
             };
 
@@ -62,67 +75,67 @@ public class ScanerUtil extends CordovaPlugin {
 
 
 
-    //扫描，对应“扫描键”down
-    private void startDecode() {
-        /*
-        // 扫描键禁用时，此intent无效
-        Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_DOWN", null);
-        sendBroadcast(intent);
-        */
-        Intent intent = new Intent("com.android.scanservice.scan.button.down", null);
-        sendBroadcast(intent);
-    }
-
-    //停止扫描，对应“扫描键”up
-    private void stopDecode() {
-        /*
-        // 扫描键禁用时，此intent无效
-        Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_UP", null);
-        sendBroadcast(intent);
-        */
-        Intent intent = new Intent("com.android.scanservice.scan.button.up", null);
-        sendBroadcast(intent);
-    }
-
-    //打开扫描头，对应“扫描服务”中“启用扫描”打勾
-    private void scanEnable() {
-        Intent intent = new Intent("com.android.scanservice.scan.on", null);
-        sendBroadcast(intent);
-    }
-
-    //关闭扫描头，对应“扫描服务”中“启用扫描”不打勾
-    private void scanDisable() {
-        Intent intent = new Intent("com.android.scanservice.scan.off", null);
-        sendBroadcast(intent);
-    }
-
-    //启用扫描键，对应“扫描服务”中“扫描模式”打勾
-    private void scanButtonEnable() {
-        Intent intent = new Intent("com.android.scanservice.scan.button.enabled", null);
-        intent.putExtra("Scan_button_enabled", true);
-        sendBroadcast(intent);
-    }
-
-    //禁用扫描键，对应“扫描服务”中“扫描模式”不打勾
-    private void scanButtonDisable() {
-        Intent intent = new Intent("com.android.scanservice.scan.button.enabled", null);
-        intent.putExtra("Scan_button_enabled", false);
-        sendBroadcast(intent);
-    }
-
-    //启用前台输出，对应“扫描服务”中“前台输出”打勾
-    private void scanOutputEnable() {
-        Intent intent = new Intent("com.android.scanservice.output.foreground", null);
-        intent.putExtra("Scan_output_foreground", true);
-        sendBroadcast(intent);
-    }
-
-    //禁用前台输出，对应“扫描服务”中“前台输出”不打勾
-    private void scanOutputDisable() {
-        Intent intent = new Intent("com.android.scanservice.output.foreground", null);
-        intent.putExtra("Scan_output_foreground", false);
-        sendBroadcast(intent);
-    }
+//    //扫描，对应“扫描键”down
+//    private void startDecode() {
+//        /*
+//        // 扫描键禁用时，此intent无效
+//        Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_DOWN", null);
+//        sendBroadcast(intent);
+//        */
+//        Intent intent = new Intent("com.android.scanservice.scan.button.down", null);
+//        sendBroadcast(intent);
+//    }
+//
+//    //停止扫描，对应“扫描键”up
+//    private void stopDecode() {
+//        /*
+//        // 扫描键禁用时，此intent无效
+//        Intent intent = new Intent("android.intent.action.FUNCTION_BUTTON_UP", null);
+//        sendBroadcast(intent);
+//        */
+//        Intent intent = new Intent("com.android.scanservice.scan.button.up", null);
+//        sendBroadcast(intent);
+//    }
+//
+//    //打开扫描头，对应“扫描服务”中“启用扫描”打勾
+//    private void scanEnable() {
+//        Intent intent = new Intent("com.android.scanservice.scan.on", null);
+//        sendBroadcast(intent);
+//    }
+//
+//    //关闭扫描头，对应“扫描服务”中“启用扫描”不打勾
+//    private void scanDisable() {
+//        Intent intent = new Intent("com.android.scanservice.scan.off", null);
+//        sendBroadcast(intent);
+//    }
+//
+//    //启用扫描键，对应“扫描服务”中“扫描模式”打勾
+//    private void scanButtonEnable() {
+//        Intent intent = new Intent("com.android.scanservice.scan.button.enabled", null);
+//        intent.putExtra("Scan_button_enabled", true);
+//        sendBroadcast(intent);
+//    }
+//
+//    //禁用扫描键，对应“扫描服务”中“扫描模式”不打勾
+//    private void scanButtonDisable() {
+//        Intent intent = new Intent("com.android.scanservice.scan.button.enabled", null);
+//        intent.putExtra("Scan_button_enabled", false);
+//        sendBroadcast(intent);
+//    }
+//
+//    //启用前台输出，对应“扫描服务”中“前台输出”打勾
+//    private void scanOutputEnable() {
+//        Intent intent = new Intent("com.android.scanservice.output.foreground", null);
+//        intent.putExtra("Scan_output_foreground", true);
+//        sendBroadcast(intent);
+//    }
+//
+//    //禁用前台输出，对应“扫描服务”中“前台输出”不打勾
+//    private void scanOutputDisable() {
+//        Intent intent = new Intent("com.android.scanservice.output.foreground", null);
+//        intent.putExtra("Scan_output_foreground", false);
+//        sendBroadcast(intent);
+//    }
 
 
     // 检查Service是否运行
