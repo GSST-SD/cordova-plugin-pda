@@ -23,51 +23,54 @@ public class ScanerUtil extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("readScanerText")) {
+            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,"不想扫描");
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
             //定义条码Receiver
-            BroadcastReceiver mScanDataReceiver = new BroadcastReceiver(){
-                @Override
-                public void onReceive(Context context, Intent intent){
-                    String action = intent.getAction();
-//                    int keycode = intent.getIntExtra("Scan_Keycode", 0);
-                    try {
-                        if (action.equals("com.android.scancontext")){
-                            // 前台输出
-                            String str = intent.getStringExtra("Scan_context");
-                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,str );
-                            pluginResult.setKeepCallback(true);
-                            callback_context.sendPluginResult(pluginResult);
-                            //注销条码Receiver
-                            unregisterReceiver(mScanDataReceiver);
-                        } else if (action.equals("com.android.scanservice.scancontext")) {
-                            // 后台输出
-                            String str = intent.getStringExtra("Scan_context");
-                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,str );
-                            pluginResult.setKeepCallback(true);
-                            callback_context.sendPluginResult(pluginResult);
-                            //注销条码Receiver
-                            unregisterReceiver(mScanDataReceiver);
-                        }
-                    } catch (Exception e) {
-                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,"获取扫描结果失败");
-                        pluginResult.setKeepCallback(true);
-                        callback_context.sendPluginResult(pluginResult);
-                    }
-
-                }
-            };
-
-            //注册条码Receiver
-            IntentFilter scanDataIntentFilter = new IntentFilter();
-            scanDataIntentFilter.addAction("com.android.scancontext");
-            scanDataIntentFilter.addAction("com.android.scanservice.scancontext");
-            registerReceiver(mScanDataReceiver, scanDataIntentFilter);
-
-            if(!isServiceRunning("com.android.scanservice.ScanService")) {
-                Toast.makeText(activity, "未检测到扫描服务", Toast.LENGTH_LONG).show();
-                //注销条码Receiver
-                unregisterReceiver(mScanDataReceiver);
-                return false;
-            }
+//            BroadcastReceiver mScanDataReceiver = new BroadcastReceiver(){
+//                @Override
+//                public void onReceive(Context context, Intent intent){
+//                    String action = intent.getAction();
+////                    int keycode = intent.getIntExtra("Scan_Keycode", 0);
+//                    try {
+//                        if (action.equals("com.android.scancontext")){
+//                            // 前台输出
+//                            String str = intent.getStringExtra("Scan_context");
+//                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,str );
+//                            pluginResult.setKeepCallback(true);
+//                            callbackContext.sendPluginResult(pluginResult);
+//                            //注销条码Receiver
+//                            unregisterReceiver(mScanDataReceiver);
+//                        } else if (action.equals("com.android.scanservice.scancontext")) {
+//                            // 后台输出
+//                            String str = intent.getStringExtra("Scan_context");
+//                            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,str );
+//                            pluginResult.setKeepCallback(true);
+//                            callbackContext.sendPluginResult(pluginResult);
+//                            //注销条码Receiver
+//                            unregisterReceiver(mScanDataReceiver);
+//                        }
+//                    } catch (Exception e) {
+//                        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,"获取扫描结果失败");
+//                        pluginResult.setKeepCallback(true);
+//                        callbackContext.sendPluginResult(pluginResult);
+//                    }
+//
+//                }
+//            };
+//
+//            //注册条码Receiver
+//            IntentFilter scanDataIntentFilter = new IntentFilter();
+//            scanDataIntentFilter.addAction("com.android.scancontext");
+//            scanDataIntentFilter.addAction("com.android.scanservice.scancontext");
+//            registerReceiver(mScanDataReceiver, scanDataIntentFilter);
+//
+//            if(!isServiceRunning("com.android.scanservice.ScanService")) {
+//                Toast.makeText(activity, "未检测到扫描服务", Toast.LENGTH_LONG).show();
+//                //注销条码Receiver
+//                unregisterReceiver(mScanDataReceiver);
+//                return false;
+//            }
             return true;
         }
         return false;
