@@ -24,7 +24,7 @@ public class ScanerUtil extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("readScanerText")) {
             //定义条码Receiver
-            private BroadcastReceiver mScanDataReceiver = new BroadcastReceiver(){
+            BroadcastReceiver mScanDataReceiver = new BroadcastReceiver(){
                 @Override
                 public void onReceive(Context context, Intent intent){
                     String action = intent.getAction();
