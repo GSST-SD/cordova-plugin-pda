@@ -16,8 +16,6 @@
         <source-file src="src/android/framework.jar" target-dir="libs"/>
         <source-file src="src/android/cordova-plugin-pda.java"
             target-dir="src/cordova/plugin/pda/cordova-plugin-pda" />
-        <source-file src="src/android/ScanerUtil.java"
-            target-dir="src/cordova/plugin/pda/ScanerUtil" />
 
     </platform>
 </plugin>
