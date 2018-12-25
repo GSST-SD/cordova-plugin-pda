@@ -3,7 +3,7 @@
     xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>cordova-plugin-pda</name>
     <NAME>clotee</NAME>
-    <js-module name="ScanerUtil" src="www/ScanerUtil.js">
+    <js-module name="ScanerUtil" src="www/cordova-plugin-pda.js">
         <clobbers target="ScanerUtil" />
     </js-module>
     <platform name="android">

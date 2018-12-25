@@ -1,5 +1,7 @@
 var exec = require('cordova/exec');
 
-exports.coolMethod = function (arg0, success, error) {
-    exec(success, error, 'cordova-plugin-pda', 'coolMethod', [arg0]);
-};
+exports.ScanerUtil = {
+    readScanerText: function (arg0, success, error) {
+        exec(success, error, 'ScanerUtil', 'readScanerText', [arg0]);
+    }
+  }
