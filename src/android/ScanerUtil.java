@@ -16,7 +16,7 @@ import android.util.Log;
 
 import java.util.List;
 
-public class ScanerUtil extends CordovaPlugin {
+public class ScanerUtil extends CordovaPlugin { 
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
