@@ -15,7 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.util.Log;
-
+import org.json.JSONArray;
+import org.json.JSONException;
 import java.util.List;
 
 public class ScanerUtil extends CordovaPlugin {
